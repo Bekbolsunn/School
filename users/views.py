@@ -1,26 +1,13 @@
-# Подключаем статус
 from rest_framework import status
-
-# Подключаем компонент для ответа
 from rest_framework.response import Response
-
-# Подключаем компонент для создания данных
 from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
-
-# Подключаем компонент для прав доступа
 from rest_framework.permissions import AllowAny
-
-# Подключаем модель User
 from .models import Teacher
-
-# Подключаем UserRegistrSerializer
 from .serializers import UserRegisterSerializer, LoginSerializer
 
 
-# Создаём класс RegistrUserView
 class RegistrationAPIView(CreateAPIView):
-    # Добавляем в queryset
     queryset = Teacher.objects.all()
     serializer_class = UserRegisterSerializer
     permission_classes = [
@@ -30,7 +17,6 @@ class RegistrationAPIView(CreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = UserRegisterSerializer(data=request.data)
 
-        # data = {}
         if serializer.is_valid():
             serializer.save()
             return Response(
@@ -46,7 +32,6 @@ class LoginAPIView(APIView):
     permission_classes = (AllowAny,)
     serializer_class = LoginSerializer
 
-    # renderer_classes = (UserJSONRenderer,)
     def post(self, request):
         data = {"error": status.HTTP_400_BAD_REQUEST}
         user = request.data
