@@ -1,0 +1,12 @@
+venv
+/venv
+venv/
+.env
+/.env
+.env/
+__static__
+/__static__
+__static__/
+__pycache__
+__pycache__/
+/__pycache__

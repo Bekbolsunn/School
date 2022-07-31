@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  test_db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  test:
+    build: .
+    restart: always
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic
+        --no-input && gunicorn -b 0.0.0.0:80 main.wsgi --reload"
+    volumes:
+      - .:/app
+      - ./static:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - test_db
+
+volumes:
+  postgres_data:
